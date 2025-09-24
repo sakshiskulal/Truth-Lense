@@ -1,0 +1,17 @@
+Flask
+Flask-CORS
+Flask-SocketIO
+gunicorn
+python-dotenv
+requests
+opencv-python-headless
+Pillow
+librosa
+soundfile
+numpy
+scipy
+gevent
+gevent-websocket
+PyJWT
+pymongo
+cloudinary

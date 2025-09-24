@@ -1,0 +1,409 @@
+{
+  "info": {
+    "name": "Deepfake Detection API",
+    "description": "Test collection for deepfake detection service using MongoDB data",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "api_key",
+      "value": "your-test-api-key-123",
+      "type": "string",
+      "description": "API key for authentication"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/health",
+          "host": ["{{base_url}}"],
+          "path": ["api", "health"]
+        },
+        "description": "Basic health check endpoint"
+      },
+      "response": []
+    },
+    {
+      "name": "Service Status",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/status",
+          "host": ["{{base_url}}"],
+          "path": ["api", "status"]
+        },
+        "description": "Get detailed service status including model initialization"
+      },
+      "response": []
+    },
+    {
+      "name": "Analyze Wolf Image 1",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test('Response has required fields', function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('isDeepfake');",
+              "    pm.expect(jsonData).to.have.property('confidence');",
+              "    pm.expect(jsonData).to.have.property('mediaType');",
+              "});",
+              "",
+              "pm.test('Confidence is within valid range', function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData.confidence).to.be.within(0, 100);",
+              "});",
+              "",
+              "console.log(`Analysis completed in: ${pm.response.responseTime}ms`);"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-API-Key",
+            "value": "{{api_key}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"media_url\": \"https://res.cloudinary.com/dwzabqieg/image/upload/v1757682271/deepcheck/uploads/whczzifm0gm81uhxbmmg.jpg\",\n  \"media_type\": \"image\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/analyze",
+          "host": ["{{base_url}}"],
+          "path": ["api", "analyze"]
+        },
+        "description": "Analyze the first wolf image from MongoDB data"
+      },
+      "response": []
+    },
+    {
+      "name": "Analyze Wolf Image 2",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test('Response has required fields', function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('isDeepfake');",
+              "    pm.expect(jsonData).to.have.property('confidence');",
+              "    pm.expect(jsonData).to.have.property('mediaType');",
+              "});",
+              "",
+              "console.log(`Analysis result: ${JSON.stringify(pm.response.json(), null, 2)}`);"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-API-Key",
+            "value": "{{api_key}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"media_url\": \"https://res.cloudinary.com/dwzabqieg/image/upload/v1757682271/deepcheck/uploads/bm1grdfmwoswc6okkali.jpg\",\n  \"media_type\": \"image\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/analyze",
+          "host": ["{{base_url}}"],
+          "path": ["api", "analyze"]
+        },
+        "description": "Analyze the second wolf image from MongoDB data"
+      },
+      "response": []
+    },
+    {
+      "name": "Analyze Tree Background",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test('Response has required fields', function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('isDeepfake');",
+              "    pm.expect(jsonData).to.have.property('confidence');",
+              "    pm.expect(jsonData).to.have.property('mediaType');",
+              "});",
+              "",
+              "const jsonData = pm.response.json();",
+              "console.log(`Tree image result: Deepfake=${jsonData.isDeepfake}, Confidence=${jsonData.confidence}%`);"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-API-Key",
+            "value": "{{api_key}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"media_url\": \"https://res.cloudinary.com/dwzabqieg/image/upload/v1757682270/deepcheck/uploads/wvdrphglzpvytkz7pqth.jpg\",\n  \"media_type\": \"image\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/analyze",
+          "host": ["{{base_url}}"],
+          "path": ["api", "analyze"]
+        },
+        "description": "Analyze the tree background image from MongoDB data"
+      },
+      "response": []
+    },
+    {
+      "name": "Batch Analyze All Images",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test('Response contains results array', function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('results');",
+              "    pm.expect(jsonData.results).to.be.an('array');",
+              "});",
+              "",
+              "pm.test('All three images were processed', function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData.results.length).to.equal(3);",
+              "});",
+              "",
+              "const jsonData = pm.response.json();",
+              "console.log('Batch Analysis Summary:');",
+              "jsonData.results.forEach((result, index) => {",
+              "    console.log(`Image ${index + 1}: Deepfake=${result.isDeepfake}, Confidence=${result.confidence}%`);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-API-Key",
+            "value": "{{api_key}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"media_list\": [\n    {\n      \"media_url\": \"https://res.cloudinary.com/dwzabqieg/image/upload/v1757682271/deepcheck/uploads/whczzifm0gm81uhxbmmg.jpg\",\n      \"media_type\": \"image\"\n    },\n    {\n      \"media_url\": \"https://res.cloudinary.com/dwzabqieg/image/upload/v1757682271/deepcheck/uploads/bm1grdfmwoswc6okkali.jpg\",\n      \"media_type\": \"image\"\n    },\n    {\n      \"media_url\": \"https://res.cloudinary.com/dwzabqieg/image/upload/v1757682270/deepcheck/uploads/wvdrphglzpvytkz7pqth.jpg\",\n      \"media_type\": \"image\"\n    }\n  ]\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/batch-analyze",
+          "host": ["{{base_url}}"],
+          "path": ["api", "batch-analyze"]
+        },
+        "description": "Batch analyze all three images from MongoDB data"
+      },
+      "response": []
+    },
+    {
+      "name": "Test Missing API Key",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 401', function () {",
+              "    pm.response.to.have.status(401);",
+              "});",
+              "",
+              "pm.test('Error message indicates invalid API key', function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData.error).to.include('Invalid API key');",
+              "});",
+              "",
+              "console.log('API key validation working correctly');"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"media_url\": \"https://res.cloudinary.com/dwzabqieg/image/upload/v1757682271/deepcheck/uploads/whczzifm0gm81uhxbmmg.jpg\",\n  \"media_type\": \"image\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/analyze",
+          "host": ["{{base_url}}"],
+          "path": ["api", "analyze"]
+        },
+        "description": "Test error handling when API key is missing"
+      },
+      "response": []
+    },
+    {
+      "name": "Test Invalid Media Type",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 400', function () {",
+              "    pm.response.to.have.status(400);",
+              "});",
+              "",
+              "pm.test('Error message indicates unsupported media type', function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData.error).to.include('Unsupported media type');",
+              "});",
+              "",
+              "console.log('Media type validation working correctly');"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-API-Key",
+            "value": "{{api_key}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"media_url\": \"https://res.cloudinary.com/dwzabqieg/image/upload/v1757682271/deepcheck/uploads/whczzifm0gm81uhxbmmg.jpg\",\n  \"media_type\": \"unsupported_format\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/analyze",
+          "host": ["{{base_url}}"],
+          "path": ["api", "analyze"]
+        },
+        "description": "Test error handling for unsupported media types"
+      },
+      "response": []
+    },
+    {
+      "name": "Test Missing Parameters",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 400', function () {",
+              "    pm.response.to.have.status(400);",
+              "});",
+              "",
+              "pm.test('Error message indicates missing parameters', function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData.error).to.include('Missing');",
+              "});",
+              "",
+              "console.log('Parameter validation working correctly');"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-API-Key",
+            "value": "{{api_key}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"media_url\": \"https://res.cloudinary.com/dwzabqieg/image/upload/v1757682271/deepcheck/uploads/whczzifm0gm81uhxbmmg.jpg\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/analyze",
+          "host": ["{{base_url}}"],
+          "path": ["api", "analyze"]
+        },
+        "description": "Test error handling when required parameters are missing"
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "console.log(`Starting request: ${pm.info.requestName} at ${new Date().toISOString()}`);",
+          "pm.environment.set('timestamp', new Date().toISOString());"
+        ]
+      }
+    }
+  ]
+}

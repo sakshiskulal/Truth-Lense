@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: truthlens-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: truthlens
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password
+
+  backend:
+    build: ./backend
+    container_name: truthlens-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=mysql://root:password@mysql:3306/truthlens
+    depends_on:
+      - mysql
+    volumes:
+      - ./uploads:/app/uploads
+    env_file:
+      - .env
+
+  frontend:
+    build: ./frontend
+    container_name: truthlens-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    environment:
+      - VITE_API_URL=http://localhost:8000
+
+volumes:
+  mysql_data:

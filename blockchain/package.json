@@ -1,0 +1,21 @@
+{
+  "name": "truthlens-blockchain",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "TruthLens smart contracts",
+  "main": "index.js",
+  "scripts": {
+    "compile": "hardhat compile",
+    "deploy": "hardhat run scripts/deploy.js --network mumbai",
+    "deploy:mainnet": "hardhat run scripts/deploy.js --network polygon",
+    "verify": "hardhat verify --network mumbai",
+    "test": "hardhat test"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^3.0.0",
+    "hardhat": "^2.17.0"
+  },
+  "dependencies": {
+    "ethers": "^5.7.2"
+  }
+}

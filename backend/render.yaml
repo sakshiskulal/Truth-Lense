@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: deepfake-detection-api
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn --worker-class gevent -w 1 --bind 0.0.0.0:${PORT:-8080} run:application"
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: PYTHON_SERVICE_API_KEY
+        generateValue: true
+      - key: SECRET_KEY
+        generateValue: true
